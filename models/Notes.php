@@ -19,6 +19,7 @@ class Notes extends Model
                 select id from tags
                 where
                     name = ' . Yii::$app->db->quoteValue($filter['tag_name']) . '
+                limit 1
             ')->queryScalar();
 
             $cond[] = '
