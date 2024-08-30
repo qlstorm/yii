@@ -15,18 +15,18 @@ class Notes extends Model
         }
 
         if (isset($filter['tag_name'])) {
+            $tagId = Yii::$app->db->createCommand('
+                select id from tags
+                where
+                    name = ' . Yii::$app->db->quoteValue($filter['tag_name']) . '
+            ')->queryScalar();
+
             $cond[] = '
                 (
                     select 1 from notes_tags
                     where
                         notes.id = note_id and
-                        (
-                            select 1 from tags
-                            where
-                                id = tag_id and
-                                name = ' . Yii::$app->db->quoteValue($filter['tag_name']) . '
-                            limit 1
-                        )
+                        tag_id = ' . $tagId . '
                     limit 1
                 )
             ';
